@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login / Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .login-box {
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+    <a href="privacy.html">Privacy Policy</a><br>
+  <a href="service.html">Terms of Service</a><br><br>
+
+  <div class="login-box">
+    <h2>Welcome to My App</h2>
+    <div id="g_id_onload"
+         data-client_id="51880121698-p1k6pbhqvm1tgucmqs4j02eg9vp21uvu.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+
+    <div id="user-info" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const userInfoDiv = document.getElementById("user-info");
+
+      // Decode JWT (for demo only — don't trust frontend alone in production)
+      const data = JSON.parse(atob(response.credential.split('.')[1]));
+      userInfoDiv.innerHTML = `
+        <h3>Signed In As:</h3>
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <img src="${data.picture}" alt="Profile" width="100">
+      `;
+    }
+  </script>
+
+</body>
+</html>
