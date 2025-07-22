@@ -44,19 +44,22 @@
   </div>
 
   <script>
-    function handleCredentialResponse(response) {
-      const userInfoDiv = document.getElementById("user-info");
-
-      // Decode JWT (for demo only — don't trust frontend alone in production)
-      const data = JSON.parse(atob(response.credential.split('.')[1]));
-      userInfoDiv.innerHTML = `
-        <h3>Signed In As:</h3>
-        <p><strong>Name:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <img src="${data.picture}" alt="Profile" width="100">
-      `;
-    }
-  </script>
+  function handleCredentialResponse(response) {
+    fetch('https://google-auth-backend-0v71.onrender.com/verify-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        window.location.href = "welcome.html";  // Redirect after login
+      } else {
+        alert("Login failed");
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
