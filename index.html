@@ -42,24 +42,34 @@
 
     <div id="user-info" style="margin-top: 20px;"></div>
   </div>
-
-  <script>
+  
+ <script>
   function handleCredentialResponse(response) {
-    fetch('https://google-auth-backend-0v71.onrender.com/verify-token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: response.credential })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success") {
-        window.location.href = "welcome.html";  // Redirect after login
-      } else {
-        alert("Login failed");
-      }
-    });
-  }
+  fetch('https://google-auth-backend-0v71.onrender.com/verify-token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: response.credential })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Network response was not ok");
+    return res.json();
+  })
+  .then(data => {
+    if (data.status === "success") {
+      // Store user info if needed
+      localStorage.setItem('profile', JSON.stringify(data.user));
+      window.location.href = "welcome.html";
+    } else {
+      alert("Login failed: " + (data.message || "Unknown error"));
+    }
+  })
+  .catch(err => {
+    alert("Error verifying token: " + err.message);
+  });
+}
+
 </script>
+
 
 </body>
 </html>
