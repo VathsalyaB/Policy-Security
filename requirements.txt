@@ -1,2 +1,4 @@
-flask
+Flask
 google-auth
+google-auth-oauthlib
+Flask-Cors
